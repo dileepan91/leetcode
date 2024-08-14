@@ -4,46 +4,21 @@ public class GasStation {
 
     public static void main(String[] args) {
         GasStation g = new GasStation();
-        int[] gas = {1,2,3,4,5};
-        int[] cost = {3,4,5,1,2};
+        int[] gas = {1, 2, 3, 4, 5};
+        int[] cost = {3, 4, 5, 1, 2};
         System.out.println(g.canCompleteCircuit(gas, cost));
     }
 
     public int canCompleteCircuit(int[] gas, int[] cost) {
-        int start = -1;
-        int tank = 0;
-        for(int n = 0;n < Integer.MAX_VALUE;n++) {
-            for (int i = 0; i < gas.length;) {
-                tank = tank + gas[i];
-                if (tank >= cost[i]) {
-                    if(start == -1) {
-                        start = i;
-                    }
-                    tank = tank - cost[i];
-                    i++;
-                } else if(start != -1) {
-                    // this means we have started at a gas station but we dont have enough to go next station, so reset the start gas startion to the next station
-                    i = start +1;
-                    start = -1;
-                    tank = 0;
-                } else {
-                    // still the starting gas station is not found.
-                    tank = 0;
-                    i++;
-                }
-                if(i == start) {
-                    return start;
-                }
-            }
-            if(start == -1) {
-                // we have visited all gas station and none of them have enough gas to start.
-                return -1;
-            }
-            if(start == 0) {
-                // if the start position is 0, and we have visited all station, coming through the loop again to visit 0th station.
-                return start;
+        int start = 0, tank = 0, diff = 0;
+        for (int i = 0; i < gas.length; i++) {
+            tank += gas[i] - cost[i];
+            diff += gas[i] - cost[i];
+            if (tank < 0) {
+                tank = 0;
+                start = i + i;
             }
         }
-        return start;
+        return diff < 0 ? -1 : start;
     }
 }
